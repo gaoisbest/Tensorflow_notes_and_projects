@@ -1,0 +1,131 @@
+
+# coding: utf-8
+
+# In[ ]:
+
+import tensorflow as tf
+
+
+# In[ ]:
+
+# a simple example
+x = 2
+y = 3
+op1 = tf.add(x, y)
+op2 = tf.multiply(x, y)
+with tf.Session() as sess:
+    op1_res, op2_res = sess.run([op1, op2]) # pass a list contains all variables that you want to fetch
+    print op1_res
+    print op2_res
+# out: 5 6
+
+
+# In[ ]:
+
+tensor_example = tf.constant([2.0, 5.0, 6.0, 7.0], shape=[2, 2])
+
+
+# In[ ]:
+
+# It is a Tensor
+print tensor_example
+# out: Tensor("Const:0", shape=(2, 2), dtype=float32)
+
+
+# In[ ]:
+
+# get the Graph the tensor belongs
+print tensor_example.graph 
+# out: <tensorflow.python.framework.ops.Graph object at 0x2b25e90>
+
+
+# In[ ]:
+
+print tf.get_default_graph()
+# out: <tensorflow.python.framework.ops.Graph object at 0x2b25e90>
+
+# the Graph which tensor a belongs is the Default graph
+assert tensor_example.graph is tf.get_default_graph()
+
+
+# In[ ]:
+
+# get the operation name
+print tensor_example.op.name
+# out: Const
+
+
+# In[ ]:
+
+# get the tensor shape
+print tensor_example.get_shape()
+# out: (2, 2)
+print tensor_example.get_shape().as_list()
+# out: [2, 2]
+
+
+# In[ ]:
+
+# new a user created graph
+graph_example = tf.Graph()
+
+# start the session using the new graph
+session_example = tf.Session(graph = graph_example)
+
+# evaluate the tensor, but get a ERROR. Since the tensor_example is in the default graph, but the session_example is running graph_example
+
+session_example.run(tensor_example)
+# out: RuntimeError: The Session graph is empty.  Add operations to the graph before calling run().
+
+
+# In[ ]:
+
+# add operations to graph_example (use graph.as_default()), using run() or eval() method.
+with graph_example.as_default():
+    tensor_with_in_graph_1 = tf.constant(8.0)
+    tensor_with_in_graph_2 = tf.constant(3.0)
+    tensor_sums = tf.add(tensor_with_in_graph_1, tensor_with_in_graph_2)
+    print session_example.run(tensor_sums)
+    print tensor_sums.eval(session = session_example)
+out: 
+11.0
+11.0 
+
+print graph_example
+# out: <tensorflow.python.framework.ops.Graph object at 0x2607b10>
+
+
+# In[ ]:
+
+# list all the operations in graph_example
+print graph_example.get_operations()
+# out: [<tf.Operation 'Const' type=Const>, <tf.Operation 'Const_1' type=Const>, <tf.Operation 'Add' type=Add>]
+print graph_example.version
+# out: 3
+
+# close the session
+session_example.close()
+
+
+# In[ ]:
+
+# start a new interactive session
+interactive_session_example = tf.InteractiveSession()
+
+interactive_tensor_example = tf.constant([7.0, 8.0, 9.0, 10.0], shape=[2, 2])
+
+# Since the session is interactive, we can call eval() directly
+print interactive_tensor_example.eval()
+# out: [[  7.   8.]
+        [  9.  10.]]
+
+
+# In[ ]:
+
+# The dynamic shape is itself a tensor describing the shape of the original tensor
+# Reference: https://blog.metaflow.fr/shapes-and-dynamic-dimensions-in-tensorflow-7b1fe79be363#.1uk3xq29p
+dynamic_shape = tf.shape(interactive_tensor_example)
+print dynamic_shape
+# out: Tensor("Shape_1:0", shape=(2,), dtype=int32)
+# The shape is (2,) because interactive_tensor_example is a 2-D tensor, so the dynamic_shape is a 1-D tensor containing size of interactive_tensor_example dimensions
+
