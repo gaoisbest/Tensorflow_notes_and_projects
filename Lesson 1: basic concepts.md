@@ -4,13 +4,13 @@
 import tensorflow as tf
 ```
 
-tensor is an n-dimensional matrix
 
-0-d tensor: scalar
-    
-1-d tensor: vector
-    
-2-d tensor: matrix
+```python
+# tensor is an n-dimensional matrix
+# 0-d tensor: scalar    
+# 1-d tensor: vector    
+# 2-d tensor: matrix
+```
 
 
 ```python
@@ -125,7 +125,6 @@ with tf.Session() as sess:
 # Nodes in graph: constants, variables and operators
 # Edges in graph: tensors
 # Graphs can be splitted into several chunks (sub-graph) and run them parallelly across multiple CPUs, GPUs, or devices
-
 # Session is used to fetch the value of tensor
 ```
 
