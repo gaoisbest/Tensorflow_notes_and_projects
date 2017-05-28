@@ -1,6 +1,1 @@
-# tensorflow_tutorials
-My study notes on tensorflow
-References: 
-https://www.kadenze.com/ and http://web.stanford.edu/class/cs20si/syllabus.html.
-
-Due to the network issue or not, I cannot upload the ipython notebook file. So I create the markdown file instead.
+Study notes of [cs20si](http://web.stanford.edu/class/cs20si/). 
