@@ -140,14 +140,35 @@ sess.run(W.initializer)
 
 - Variable operation
 ```
-evaluate the value using eval()
+# evaluate the value using eval()
+W = tf.Variable(tf.truncated_normal([2, 2], name='weights'))
+with tf.Session() as sess:
+    sess.run(W.initializer)
+    print W.eval() # equals to sess.run(W)
+[[-0.42169872  1.10198021]
+ [-0.09198709  0.51444685]]
 
 a = tf.Variable(10, name='a')
 assign_a = a.assign(100)
 with tf.Session() as sess:
+    # call assign_a directly instead of calling a.initializer, since assign() will initialize a first
     sess.run(assign_a)
-    print sess.run(a) # call assign_a directly instead of calling a.initializer, since assign() will initialize a first
-# out: 100
+    # In fact, initializer op is the assign op that assigns the variable’s initial value to the variable itself
+    print sess.run(a) # 100
+
+# assign_add() and assign_sub() can’t initialize the variable tmp_var because these ops need the original value of tmp_var
+tmp_var = tf.Variable(10)
+with tf.Session() as sess:
+    sess.run(tmp_var.initializer) # important
+    print sess.run(tmp_var.assign_add(10)) # 20
+    print sess.run(tmp_var.assign_sub(2)) # 18
+
+# use a variable to initialize another variable
+# want to declare U = W * 2
+W = tf.Variable(tf.truncated_normal([700, 10]))
+U = tf.Variable(2 * W.intialized_value())
+# ensure that W is initialized before its value is used to initialize U
+
 ```
 
 - placeholder
@@ -158,8 +179,7 @@ with tf.Session() as sess:
 a = tf.placeholder(tf.float32, shape=[3], name='place_a')
 b = tf.constant([2.0,3.0,4.0], name='b')
 c = tf.add(a, b)
-with tf.Session() as sess:
-    sess.run(tf.global_variables_initializer())
+with tf.Session() as sess:    
     print sess.run(c, feed_dict={a:[3.0, 2.0, 1.0]})
 #out: [ 5.  5.  5.]
 ```
