@@ -5,12 +5,11 @@
 Sub-graphs can **save computation**, since only run sub-graphs that the fetched data belongs.
 - **Tensor** is an **n-dimensional array**. 0-d tensor: scalar, 1-d tensor: vector, 2-d tensor: matrix.
 - Create the **Session**, evaluate the graph and fetch the value.
-- **Placeholder** assembles the graph first without knowing the values needed for computation. Feed the values to placeholders using a **dictionary**.
+- **Placeholder** assembles the graph first without knowing the values needed for computation. Feed the values to placeholders using a **dictionary**. Both placeholder and Variable are feedable! `tf.Graph().is_feedable(variable)`
 - Tricks
   - **Constants are stored in the graph definition**. Therefore, it makes loading graphs expensive when constants are big. Only use constants for primitive types.
   - `tf.Variable` is a class, but `tf.constant` is an op.
-
-
+  - **Avoid lazy loading**. Use [Python attribute](http://danijar.com/structuring-your-tensorflow-models/) to ensure a function is only loaded the first time it’s called.
 
 # Codes
 - Basic
