@@ -9,6 +9,7 @@ Sub-graphs can **save computation**, since only run sub-graphs that the fetched 
 - Tricks
   - **Constants are stored in the graph definition**. Therefore, it makes loading graphs expensive when constants are big. Only use constants for primitive types.
   - `tf.Variable` is a class, but `tf.constant` is an op.
+  - `tf.Variable` calls `tf.Variable.__init__`: **always creates a new variable** with initial_value. `tf.get_variable`: **gets an existing variable or create a new one**. It's very useful to use initializers such as xavier_initializer: `W = tf.get_variable('W', shape=[784, 256], initializer=tf.contrib.layers.xavier_initializer())`
   - **Avoid lazy loading**. Use [Python attribute](http://danijar.com/structuring-your-tensorflow-models/) to ensure a function is only loaded the first time it’s called.
 
 # Codes
@@ -170,6 +171,49 @@ U = tf.Variable(2 * W.intialized_value())
 # ensure that W is initialized before its value is used to initialize U
 
 ```
+
+- tf.Variable and tf.get_variable
+
+```
+See
+https://stackoverflow.com/questions/37098546/difference-between-variable-and-get-variable-in-tensorflow)
+https://stackoverflow.com/questions/35919020/whats-the-difference-of-name-scope-and-a-variable-scope-in-tensorflow
+
+############################ variable sharing
+with tf.variable_scope('var_scope'):
+    a = tf.get_variable('get_var_1', [1])
+    print a.name # var_scope/get_var_1:0
+
+with tf.variable_scope('var_scope'):
+    b = tf.get_variable('get_var_1', [1])
+    print b.name
+# ValueError: Variable var_scope/get_var_1 already exists, disallowed. Did you mean to set reuse=True in VarScope? Originally defined at:
+
+with tf.variable_scope('var_scope', reuse=True):
+    b = tf.get_variable('get_var_1', [1])
+    print b.name # var_scope/get_var_1:0
+
+############################ variable_scope affects tf.Variable
+with tf.variable_scope('var_scope_another'):
+    a = tf.get_variable('get_var', [1])
+    b = tf.Variable(1, name='get_var')
+    print a.name # var_scope_another/get_var:0
+    print b.name # var_scope_another/get_var_1:0
+
+
+with tf.variable_scope('var_scope_another'):
+    a = tf.Variable(1, name='get_var')
+    b = tf.Variable(1, name='get_var')
+    print a.name # var_scope_another_1/get_var:0
+    print b.name # var_scope_another_1/get_var_1:0
+
+############################ name_scope is ignored by tf.get_variable.
+with tf.name_scope('nam_scope'):
+    a = tf.get_variable('get_var', [1])
+    b = tf.Variable(1, name='var')
+    print a.name # get_var:0
+    print b.name # nam_scope/var:0
+ ```
 
 - placeholder
 ```
