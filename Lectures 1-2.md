@@ -78,6 +78,7 @@ x2 = tf.constant(3, name='x2')
 y = tf.add(x1, x2, name='add')
 
 with tf.Session() as sess:
+    # create the writer after graph definition and before running the sess 
     writer = tf.summary.FileWriter('./graphs', sess.graph)
     print sess.run(y)
 writer.close()
