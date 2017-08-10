@@ -60,4 +60,4 @@ https://stackoverflow.com/questions/34870614/what-does-tf-nn-embedding-lookup-fu
 After running the model, execute `tensorboard --logdir=checkpoints`. To show chinese words, in left side of 'EMBEDDINGS' tab, click `Load data` button to import 'processed/vocab_200000.tsv'.
 
 
-![ ](https://github.com/gaoisbest/cs20si_notes/blob/master/tf_2_word2vec.png)
+![ ](https://github.com/gaoisbest/cs20si_notes/blob/master/tf_2_word2vec_Benz.png)
