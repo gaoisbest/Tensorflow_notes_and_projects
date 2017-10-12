@@ -4,9 +4,21 @@
 
 - Model should be build as a **class**. **Checkpoint**: the step at which you save your graph’s variables.
 
+- `tf.name_scope` tell TensorBoard to know which nodes should be grouped together.
+
 - `tf.train.Saver()`: periodically save the model’s parameters (i.e., graph’s variables) after a certain number of steps.
 
-- `tf.name_scope` tell TensorBoard to know which nodes should be grouped together.
+- Tensorflow model files
+    - data file
+    It contains the **values** of all variables.
+    - meta file 
+    It describes the saved **graph structure**. Applying `tf.train.import_meta_graph('/model.ckpt.meta')` will restore Saver and Graph.
+    - index file
+    It contains **key-value** immutable table. Each key is a **tensor name**, and its value is a serialized tensor-related information.
+    
+    references:  
+    https://stackoverflow.com/questions/41265035/tensorflow-why-there-are-3-files-after-saving-the-model  
+    http://cv-tricks.com/tensorflow-tutorial/save-restore-tensorflow-models-quick-complete-tutorial/
 
 # Codes
 
