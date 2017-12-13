@@ -8,5 +8,14 @@
 # Tensorflow notes
 `Lectures 1-2.md`, `Lectures 3.md` and `Lectures 4-5.md` are notes of [cs20si](http://web.stanford.edu/class/cs20si/). Each lecture includes basic concepts, codes and part solutions of corresponding assignment.
 
+# Question and Answer
+## Difference between `tf.nn.static_rnn` and `tf.nn.dynamic_rnn`.
+- `static_rnn` creates an **unrolled** RNNs network by chaining cells. The weights are shared between cells. Since the network is static, the input length should be same.
+- `dynamic_rnn` uses a `while_loop()`operation to run over the cell the appropriate number of times.
+- Both have `sequence_length` parameter, which is a `batch_size` 1D tensor . When exceed `sequence_length`, they will **copy-through state and zero-out outputs**.
+
+References:  
+[1] Hands on machine learning with Scikit-Learn and TensorFlow P385  
+[2] https://www.zhihu.com/question/52200883
 
 
