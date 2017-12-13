@@ -9,13 +9,30 @@
 `Lectures 1-2.md`, `Lectures 3.md` and `Lectures 4-5.md` are notes of [cs20si](http://web.stanford.edu/class/cs20si/). Each lecture includes basic concepts, codes and part solutions of corresponding assignment.
 
 # Question and Answer
-## Difference between `tf.nn.static_rnn` and `tf.nn.dynamic_rnn`.
+## 1. Difference between `tf.nn.static_rnn` and `tf.nn.dynamic_rnn`.
 - `static_rnn` creates an **unrolled** RNNs network by chaining cells. The weights are shared between cells. Since the network is static, the input length should be same.
 - `dynamic_rnn` uses a `while_loop()`operation to run over the cell the appropriate number of times.
 - Both have `sequence_length` parameter, which is a `batch_size` 1D tensor . When exceed `sequence_length`, they will **copy-through state and zero-out outputs**.
 
 References:  
-[1] Hands on machine learning with Scikit-Learn and TensorFlow P385  
+[1] Hands on machine learning with Scikit-Learn and TensorFlow p385  
 [2] https://www.zhihu.com/question/52200883
+
+## 2. How to perform series output at RNNs each time step ?
+Under the scenarios of stock price prediction and char-rnn etc, we want to the outputs of each time step. Basically, there are two methods, but the first is not efficient. So the second is perfered.
+- `tf.contrib.rnn.OutputProjectionWrapper` **adds a fully connected layer without activation** on top of each time step output, but not affect the cell state. And all the fully connected layers share the same weights and biases.  
+  - Usage: `cell = tf.contrib.rnn.OutputProjectionWrapper(cell, output_size = 1 [e.g., stock prediction] or vocab_size [e.g., char-rnn])`  
+![](https://github.com/gaoisbest/Tensorflow_notes_and_projects/blob/master/Q%26A_1_OutputProjectionWrapper.png)
+- Reshape operations with three steps:
+  - Reshape RNNs outputs from `[batch_size, time_steps, num_units]` to `[batch_size * time_steps, num_units]`.
+  - Apply a fully connected layer with appropriate output size, which will result in an output with shape `[batch_size * time_steps, output_size]`.
+  - Finally reshape it to `[batch_size, time_steps, output_size]`.  
+![](https://github.com/gaoisbest/Tensorflow_notes_and_projects/blob/master/Q%26A_2_OutputProjection_Efficient.png)
+
+References:  
+[1] Hands on machine learning with Scikit-Learn and TensorFlow p393, p395
+
+## 3. How to initialize RNNs weights and biases ?
+
 
 
