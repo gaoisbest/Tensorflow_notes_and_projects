@@ -19,8 +19,8 @@ References:
 [2] https://www.zhihu.com/question/52200883
 
 ## 2. How to perform series output at RNNs each time step ?
-Under the scenarios of stock price prediction and char-rnn etc, we want to the outputs of each time step. Basically, there are two methods, but the first is not efficient. So the second is perfered.
-- `tf.contrib.rnn.OutputProjectionWrapper` **adds a fully connected layer without activation** on top of each time step output, but not affect the cell state. And all the fully connected layers share the same weights and biases.  
+Under the scenarios of stock price prediction and char-rnn etc, we want to obtain the outputs of each time step. Basically, there are two methods, but the first is not efficient. So the second is perfered.
+- `tf.contrib.rnn.OutputProjectionWrapper` **adds a fully connected layer without activation** on top of each time step output, but not affect the cell state. And all the fully connected layers share the same weights and biases. The *projection* means linear transformation without activation.
   - Usage: `cell = tf.contrib.rnn.OutputProjectionWrapper(cell, output_size = 1 [e.g., stock prediction] or vocab_size [e.g., char-rnn])`  
 ![](https://github.com/gaoisbest/Tensorflow_notes_and_projects/blob/master/Q%26A_1_OutputProjectionWrapper.png)
 - Reshape operations with three steps:
@@ -33,6 +33,16 @@ References:
 [1] Hands on machine learning with Scikit-Learn and TensorFlow p393, p395
 
 ## 3. How to initialize RNNs weights and biases ?
+The weights and biases are variables essentially. `tf.get_variable` method has a `initializer` parameter and the default is `None`. If initializer is None (the default), **the default initializer** passed in the **variable scope** will be used. Therefore, the initialization codes looks like this:
+
+```
+cell = tf.nn.rnn_cell.GRUCell(256)
+with tf.variable_scope('RNN', initializer=tf.contrib.layers.xavier_initializer()):
+    outputs, state = tf.nn.dynamic_rnn(cell, ...)
+```
+
+References:  
+[1] https://www.tensorflow.org/api_docs/python/tf/get_variable
 
 
 
