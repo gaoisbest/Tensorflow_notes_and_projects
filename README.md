@@ -4,6 +4,7 @@
 - `tf_3_LSTM_text_classification_version_1.ipynb`: LSTM for text classification version 1. `tf.nn.static_rnn` with single layer. See [Chinese notes](http://url.cn/5cLDOQI), [中文解读](http://url.cn/5cLDOQI).
 - `tf_3_LSTM_text_classification_version_2.ipynb`: LSTM for text classification version 2. `tf.nn.dynamic_rnn` with multiple layers, variable sequence length, last relevant output. See [Chinese notes](http://url.cn/5w5VbaI), [中文解读](http://url.cn/5w5VbaI).
 - `tf_4_bi-directional_LSTM_NER.ipynb`: bi-directional LSTM + CRF for brands NER. See [English notes](https://github.com/gaoisbest/NLP-Projects/blob/master/Sequence%20labeling%20-%20NER/README.md), [Chinese notes](http://url.cn/5fcC754) and [中文解读](http://url.cn/5fcC754).
+- `tf_5_LSTM_Prediction.ipynb`: generate outputs at each time step.
 
 # Tensorflow notes
 `Lectures 1-2.md`, `Lectures 3.md` and `Lectures 4-5.md` are notes of [cs20si](http://web.stanford.edu/class/cs20si/). Each lecture includes basic concepts, codes and part solutions of corresponding assignment.
@@ -38,11 +39,21 @@ The weights and biases are variables essentially. `tf.get_variable` method has a
 ```
 cell = tf.nn.rnn_cell.GRUCell(256)
 with tf.variable_scope('RNN', initializer=tf.contrib.layers.xavier_initializer()):
-    outputs, state = tf.nn.dynamic_rnn(cell, ...)
+    outputs, state = tf.nn.dynamic_rnn(cell, ...) # call dynamic_rnn will actually create the cells and their variables
 ```
 
 References:  
 [1] https://www.tensorflow.org/api_docs/python/tf/get_variable
 
+## 4. How to apply dropout to RNNs ? 
+`DropoutWrapper` applies dropout between the RNNs layers. Dropout should be used only during training, and `is_training` flags the status.
+```
+keep_prob = 0.5
+cell = tf.nn.rnn_cell.GRUCell(256)
+if is_training:
+    cell = tf.contrib.rnn.DropoutWrapper(cell, input_keep_prob=keep_prob)
+outputs, state = tf.nn.dynamic_rnn(cell, ...)
+```
 
-
+References:  
+[1] Hands on machine learning with Scikit-Learn and TensorFlow p399
