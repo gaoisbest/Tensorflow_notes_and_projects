@@ -4,12 +4,12 @@
 - `tf_3_LSTM_text_classification_version_1.ipynb`: LSTM for text classification version 1. `tf.nn.static_rnn` with single layer. See [Chinese notes](http://url.cn/5cLDOQI), [中文解读](http://url.cn/5cLDOQI).
 - `tf_3_LSTM_text_classification_version_2.ipynb`: LSTM for text classification version 2. `tf.nn.dynamic_rnn` with multiple layers, variable sequence length, last relevant output. See [Chinese notes](http://url.cn/5w5VbaI), [中文解读](http://url.cn/5w5VbaI).
 - `tf_4_bi-directional_LSTM_NER.ipynb`: bi-directional LSTM + CRF for brands NER. See [English notes](https://github.com/gaoisbest/NLP-Projects/blob/master/Sequence%20labeling%20-%20NER/README.md), [Chinese notes](http://url.cn/5fcC754) and [中文解读](http://url.cn/5fcC754).
-- `tf_5_LSTM_Prediction.ipynb`: generate outputs at each time step. TODO
+- `tf_5_CNN_text_classification.ipynb`: CNN for text classification. `tf.nn.conv2d`, `tf.nn.max_pool`
 
 # Tensorflow notes
 `Lectures 1-2.md`, `Lectures 3.md` and `Lectures 4-5.md` are notes of [cs20si](http://web.stanford.edu/class/cs20si/). Each lecture includes basic concepts, codes and part solutions of corresponding assignment.
 
-# Question and Answer
+# RNNs
 ## 1. Difference between `tf.nn.static_rnn` and `tf.nn.dynamic_rnn`.
 - `static_rnn` creates an **unrolled** RNNs network by chaining cells. The weights are shared between cells. Since the network is static, the input length should be same.
 - `dynamic_rnn` uses a `while_loop()`operation to run over the cell the appropriate number of times.
@@ -56,4 +56,35 @@ outputs, state = tf.nn.dynamic_rnn(cell, ...)
 ```
 
 References:  
-[1] Hands on machine learning with Scikit-Learn and TensorFlow p399
+[1] Hands on machine learning with Scikit-Learn and TensorFlow p399  
+
+## 5. How to build multiple layer RNNs ?
+```
+cells = [BasicLSTMCell(num_units) for layer in range(num_layers)]
+cells_drop = [DropoutWrapper(cell, input_keep_prob=keep_prob) for cell in cells]
+multi_layer_cell = MultiRNNCell(cells_drop)
+```
+
+References:  
+[1] https://github.com/ageron/handson-ml/blob/master/14_recurrent_neural_networks.ipynb
+
+
+# CNNs
+## 1. Notes of pooling
+- Similar role as Convolution layer but **without parameters**.
+- **Not affect** the number of channels.
+- With `2*2` kernel and stride of 2 (`tf.nn.max_pool(X, ksize=[1, 2, 2, 1], stride=[1, 2, 2, 1], padding='VALID')`), pooling will drop **75%** input values. `ksize: (batch_size, height, width , channels)` 
+
+
+## 2. How to solve out-of-memory (OOV) problem during training ?
+Since back propagation process requires all the intermediate values (i.e., parameters) computed during the forward pass, convolutional layer **require a huge amount of RAM (i.e., number of parameters * 32-bit floats) during training**.  
+The following shows the solution:  
+- Reduce the batch size.
+- Large stride.
+- Remove few layers.
+- Try 16-bit floats.
+- Distribute the model across multiple devices.
+
+References:  
+[1] Hands on machine learning with Scikit-Learn and TensorFlow p362
+
