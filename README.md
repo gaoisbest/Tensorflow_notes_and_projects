@@ -88,3 +88,12 @@ The following shows the solution:
 References:  
 [1] Hands on machine learning with Scikit-Learn and TensorFlow p362
 
+## 3. Why 1 by 1 convolution is useful ?
+- It does not consider spatial information but only channels information.
+- It really does convolution operation, so it adds non-linearity.
+- It reduces the number of learned parameters in GoogLeNet inception block.
+
+References:  
+[1] https://www.quora.com/What-is-a-1X1-convolution
+[2] https://zhuanlan.zhihu.com/p/30182988  
+
