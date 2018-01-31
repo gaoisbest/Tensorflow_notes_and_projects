@@ -93,8 +93,8 @@ References:
 - It really does convolution operation, so it adds non-linearity.
 - It reduces the number of learned parameters in GoogLeNet inception block.  
 
-References:  
-[1] https://www.quora.com/What-is-a-1X1-convolution
+References:  
+[1] https://www.quora.com/What-is-a-1X1-convolution  
 [2] https://zhuanlan.zhihu.com/p/30182988  
 
 # Practical Q&A
@@ -104,3 +104,14 @@ When run the same commands several times in jupyter, you are ends with that the 
 References:  
 [1] Hands on machine learning with Scikit-Learn and TensorFlow p234
 
+## 2. Shared variable
+**`tf.get_variable()`** **creates** the shared variable if it does not exist or **reuses** it if it already exists.
+```
+# first define the variable
+with tf.variable_scope('relu'):
+    t = tf.get_variable('t', shape=(), initializer=tf.constant_initializer(0.4))
+
+# then reuse it with resue=True
+with tf.variable_scope('relu', reuse=True):
+    t = tf.get_variable('t')
+```
