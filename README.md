@@ -91,9 +91,16 @@ References:
 ## 3. Why 1 by 1 convolution is useful ?
 - It does not consider spatial information but only channels information.
 - It really does convolution operation, so it adds non-linearity.
-- It reduces the number of learned parameters in GoogLeNet inception block.
+- It reduces the number of learned parameters in GoogLeNet inception block.  
 
-References:  
+References:  
 [1] https://www.quora.com/What-is-a-1X1-convolution
 [2] https://zhuanlan.zhihu.com/p/30182988  
+
+# Practical Q&A
+## 1. Run tensorflow in Jupyter results in duplicate nodes in one graph
+When run the same commands several times in jupyter, you are ends with that the default graph contains duplicate nodes. You can **restart the kernel** or run **`tf.reset_default_graph()`** to solve this problem.  
+
+References:  
+[1] Hands on machine learning with Scikit-Learn and TensorFlow p234
 
