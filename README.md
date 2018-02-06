@@ -115,3 +115,6 @@ with tf.variable_scope('relu'):
 with tf.variable_scope('relu', reuse=True):
     t = tf.get_variable('t')
 ```
+
+## 3. Reusing pretrained layers
+**Transfer learning** will work well if the inputs have similar low-level features.
