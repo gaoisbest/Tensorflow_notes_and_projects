@@ -118,3 +118,27 @@ with tf.variable_scope('relu', reuse=True):
 
 ## 3. Reusing pretrained layers
 **Transfer learning** will work well if the inputs have similar low-level features.
+
+## 4. GPU Usage
+### set use specific GPU
+```
+# use GPU 0
+os.environ['CUDA_VISIBLE_DEVICES'] = '0'
+
+# use GPU 0 and 1
+os.environ['CUDA_VISIBLE_DEVICES'] = '0,1'
+
+reference:
+https://blog.csdn.net/dcrmg/article/details/79091941
+```
+
+### dynamic require memory
+
+```
+config = tf.ConfigProto()  
+config.gpu_options.allow_growth = True  
+session = tf.Session(config=config)
+
+reference:
+https://blog.csdn.net/dcrmg/article/details/79091941
+```
