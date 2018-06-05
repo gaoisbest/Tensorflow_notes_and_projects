@@ -142,3 +142,19 @@ session = tf.Session(config=config)
 reference:
 https://blog.csdn.net/dcrmg/article/details/79091941
 ```
+
+## 5. Binary classification
+```
+# cost
+cost = tf.reduce_mean(tf.nn.sigmoid_cross_entropy_with_logits(logits=logits, labels=label))
+
+# accuracy
+threshold = tf.constant(0.5)
+y_pred = tf.nn.sigmoid(logits)
+delta = tf.abs(label - y_pred)
+corr_pred = tf.cast(tf.less(delta, threshold), tf.int32)
+accuracy = tf.reduce_mean(tf.cast(corr_pred, tf.float32))
+
+reference:
+https://gist.github.com/tomokishii/bc110ef7b5939491753151695e22e139
+```
