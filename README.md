@@ -158,3 +158,9 @@ accuracy = tf.reduce_mean(tf.cast(corr_pred, tf.float32))
 reference:
 https://gist.github.com/tomokishii/bc110ef7b5939491753151695e22e139
 ```
+
+# Tensorflow Serving
+
+## References
+- [Official link](https://www.tensorflow.org/serving/)
+- [Tutorial video](https://www.youtube.com/watch?v=T_afaArR0E8) and [codes](https://github.com/llSourcell/How-to-Deploy-a-Tensorflow-Model-in-Production)
