@@ -158,8 +158,86 @@ accuracy = tf.reduce_mean(tf.cast(corr_pred, tf.float32))
 reference:
 https://gist.github.com/tomokishii/bc110ef7b5939491753151695e22e139
 ```
+## Model deploying
+## 1. Tensorflow Serving
+## 2. Django
+- New a project
+```
+django-admin startproject new_project_name
+```
+- New a handler (say `apis.py`) that handel http requests and response
+```
+from django.shortcuts import render
+from rest_framework.parsers import JSONParser
+from django.http import JsonResponse
+from django.views.decorators.csrf import csrf_exempt
 
-# Tensorflow Serving
+# model initialization
+model = Model()
+
+@csrf_exempt
+def process_request(request):
+    if request.method == 'POST': 
+        # get data
+        data = JSONParser().parse(request)
+        text = data.get('text')
+        result = model.predict(text)
+        return JsonResponse(result, safe=False)
+    else:
+        return JsonResponse('Error', safe=False)
+```
+- Config `urls.py`
+```
+from .apis import process_request
+urlpatterns = [
+    url(r'^admin/', admin.site.urls),
+    url(r'^predict_api/', process_request)
+]
+```
+- Run server
+```
+python manage.py runserver port
+```
+- Test
+```
+curl -i -H "Content-type: application/json" -b cookies.txt -X POST http://127.0.0.7:port/predict_api/ -d '{ "text":"I love you and you love me too" }'
+```
+or 
+```
+Restlet Client in Chrome.
+```
+
+## 3. Flask
+- New a handler (say `apis.py`) that handel http requests and response
+```
+from flask import Flask
+from flask import request
+from flask_json import FlaskJSON, JsonError, as_json
+
+app = Flask(__name__)
+json = FlaskJSON(app)
+
+# model initialization
+model = Model()
+
+# decorator that specify aip and stratrgy
+@app.route('/predict_api', methods=['POST'])
+# decorator that specify the return type
+@as_json
+def handler():
+    data = request.get_json(force=False, silent=False, cache=True)
+    try:
+        response = model.predict(data['text'])
+    except (KeyError, TypeError, ValueError):
+        raise JsonError(description='Invalid value.')
+    # convert to json automatically
+    return response
+```
+- Run server
+```
+export FLASK_APP=apis.py
+flask run
+```
 
 ## References
 - [Official link](https://www.tensorflow.org/serving/)
