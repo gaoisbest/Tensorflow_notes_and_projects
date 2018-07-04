@@ -238,6 +238,20 @@ def handler():
 export FLASK_APP=apis.py
 flask run
 ```
+## 4. docker
+```
+# look at all containers
+docker ps -a
+
+# look at running containers
+docker ps : 
+
+# logs
+docker logs id
+
+# remove container
+docker rm containerid
+```
 
 ## References
 - [Official link](https://www.tensorflow.org/serving/)
