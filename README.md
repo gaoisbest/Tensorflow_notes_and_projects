@@ -165,7 +165,7 @@ https://gist.github.com/tomokishii/bc110ef7b5939491753151695e22e139
 ```
 django-admin startproject new_project_name
 ```
-- New a handler (say `apis.py`) that handel http requests and response
+- New a handler (say `apis.py`) that handle http requests and response in `new_project_name/new_project_name` folder
 ```
 from django.shortcuts import render
 from rest_framework.parsers import JSONParser
@@ -186,7 +186,7 @@ def process_request(request):
     else:
         return JsonResponse('Error', safe=False)
 ```
-- Config `urls.py`
+- Config `urls.py` in `new_project_name/new_project_name` folder
 ```
 from .apis import process_request
 urlpatterns = [
@@ -194,13 +194,13 @@ urlpatterns = [
     url(r'^predict_api/', process_request)
 ]
 ```
-- Run server
+- Run server in `new_project_name` folder
 ```
 python manage.py runserver port
 ```
-- Test
+- Test. Note **/** after **predict_api** is necessary.
 ```
-curl -i -H "Content-type: application/json" -b cookies.txt -X POST http://127.0.0.7:port/predict_api/ -d '{ "text":"I love you and you love me too" }'
+curl -i -H "Content-type: application/json" -b cookies.txt -X POST http://127.0.0.1:port/predict_api/ -d '{ "text":"I love you and you love me too" }'
 ```
 or 
 ```
@@ -240,17 +240,20 @@ flask run
 ```
 ## 4. docker
 ```
+# look at running containers
+docker ps
+
 # look at all containers
 docker ps -a
-
-# look at running containers
-docker ps : 
 
 # logs
 docker logs id
 
 # remove container
 docker rm containerid
+
+# look at all images
+docker image ls
 ```
 
 ## References
