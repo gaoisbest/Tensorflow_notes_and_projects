@@ -247,13 +247,26 @@ docker ps
 docker ps -a
 
 # logs
-docker logs id
+docker logs containerid
+
+# stop container
+docker stop containerid
 
 # remove container
 docker rm containerid
 
+# remove image
+docker rmi imageid
+
 # look at all images
 docker image ls
+
+# save file from inside container to outside disk
+# from https://stackoverflow.com/questions/31448821/how-to-write-data-to-host-file-system-from-docker-container
+docker run -v /Users/<path>:/<container path>
+
+# e.g.
+docker run --name=Containername -d -v /var/log/iogfoldername:/Logs
 ```
 
 ## References
